@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author stive
  */
-@WebServlet(name = "Redir", urlPatterns = {"/redir.do"})
-public class Redir extends HttpServlet {
+@WebServlet(name = "RegistrarCuenta", urlPatterns = {"/registrarCuenta.do"})
+public class RegistrarCuenta extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,25 +33,27 @@ public class Redir extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         try {
-            Banco banco = new Banco();
+        try {
+            Integer nroCuenta = Integer.parseInt(request.getParameter("nrocuenta"));
+            int t = Integer.parseInt(request.getParameter("tipocuenta"));            
+            Integer cedula = Integer.parseInt(request.getParameter("cedula"));
             
-            String url = request.getParameter("url");
+            Banco banco = (Banco) (request.getSession().getAttribute("banco"));
             
-            if (request.getSession().getAttribute("banco") != null) {
-                banco = (Banco) (request.getSession().getAttribute("banco"));
+            if (banco.insertarCuenta(nroCuenta, cedula, t)) {
                 request.getSession().setAttribute("banco", banco);
-                request.getRequestDispatcher(url).forward(request, response);
+                request.getRequestDispatcher("./JSP/Cuenta/registroexitoso.jsp").forward(request, response);
             }
             else {
                 System.err.println("falso");
-                request.getSession().setAttribute("error", "No existe banco creado");
-                request.getRequestDispatcher("./JSP/error/errorbanco.jsp").forward(request, response);
+                request.getSession().setAttribute("error", "Dato ya registrado en el sistema");
+                request.getRequestDispatcher("./JSP/error/errorCta.jsp").forward(request, response);
             }
+            
         } catch (Exception e) {
             System.err.println(e.getMessage());
             request.getSession().setAttribute("error", e.getMessage());
-            request.getRequestDispatcher("./JSP/error/errorbanco.jsp").forward(request, response);
+            request.getRequestDispatcher("./JSP/error/errorCta.jsp").forward(request, response);
         }
     }
 

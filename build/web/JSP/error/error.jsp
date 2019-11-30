@@ -12,6 +12,12 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Papi la esta cagando</h1>
+        <%
+            String error=(String)(request.getSession().getAttribute("error"));
+        %>
+        <h1 class="register-title">Hubo un error: <%=error%></h1>
+        <p>
+            <a href="./index.html">Regresar a Inicio</a>
+        </p>
     </body>
 </html>

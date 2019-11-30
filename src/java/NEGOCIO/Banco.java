@@ -7,7 +7,11 @@ package NEGOCIO;
 
 import DAO.ClienteJpaController;
 import DAO.Conexion;
+import DAO.CuentaJpaController;
+import DAO.TipoJpaController;
 import DTO.Cliente;
+import DTO.Cuenta;
+import DTO.Tipo;
 import com.sun.istack.internal.logging.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,11 +27,15 @@ public class Banco {
     Conexion con = Conexion.getConexion();
     ClienteJpaController clienteDAO = new ClienteJpaController(con.getBd());
     List<Cliente> clientes = clienteDAO.findClienteEntities();
+    CuentaJpaController cuentaDAO = new CuentaJpaController(con.getBd());
+    List<Cuenta> cuentas = cuentaDAO.findCuentaEntities();
+    TipoJpaController tipoDAO = new TipoJpaController(con.getBd());
+    List<Tipo> tipos = tipoDAO.findTipoEntities();
 
     public Banco() {
     }
-    
-    public boolean insertarCliente(Integer cedula, String nombre, String fechanacimiento, String dircorrespondencia, int telefono, String email) throws ParseException{
+
+    public boolean insertarCliente(Integer cedula, String nombre, String fechanacimiento, String dircorrespondencia, int telefono, String email) throws ParseException {
         Cliente c = new Cliente();
         c.setCedula(cedula);
         c.setNombre(nombre);
@@ -35,19 +43,79 @@ public class Banco {
         c.setDircorrespondencia(dircorrespondencia);
         c.setTelefono(telefono);
         c.setEmail(email);
-        try{
+        try {
             clienteDAO.create(c);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         return false;
     }
 
-    //debo arreglar este metodo
-    private Date crearFecha(String fecha) throws ParseException{
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+    public boolean insertarCuenta(Integer nroCuenta, Integer cedula, int tipo) {
+        Cliente x = new Cliente();
+        x.setCedula(cedula);
+        x = buscarCliente(x);
+        if (x == null) {
+            return false;
+        }
+        Tipo t = new Tipo();
+        t.setId(tipo);
+        t = buscarTipo(t);
+        if (t == null) {
+            return false;
+        }
+        Cuenta cta = new Cuenta();
+        cta.setNroCuenta(nroCuenta);
+        cta.setCedula(x);
+        cta.setTipo(t);
+        try {
+            cuentaDAO.create(cta);
+            return true;
+        } catch (Exception e) {
+        }
+
+        return false;
+    }
+
+    private Date crearFecha(String fecha) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
         Date date = formatter.parse(fecha);
         return date;
     }
+
+    private Tipo buscarTipo(Tipo x) {
+        for (Tipo t : this.tipos) {
+            if (t.equals(x)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    private Cliente buscarCliente(Cliente x) {
+        for (Cliente y : this.clientes) {
+            if (y.equals(x)) {
+                return y;
+            }
+        }
+        return null;
+    }
+
+    public ClienteJpaController getClienteDAO() {
+        return clienteDAO;
+    }
+
+    public void setClienteDAO(ClienteJpaController clienteDAO) {
+        this.clienteDAO = clienteDAO;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
+    }
+
 }

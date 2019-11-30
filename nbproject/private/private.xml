@@ -5,9 +5,14 @@
         <group>
             <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/NEGOCIO/Banco.java</file>
             <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/web/index.html</file>
-            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/DAO/Conexion.java</file>
-            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/TEST/Test.java</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/CONTROLLER/Redir.java</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/DTO/Cliente.java</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/CONTROLLER/RegistrarCliente.java</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/web/JSP/Cliente/registroexitoso.jsp</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/web/JSP/error/error.jsp</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/DTO/Cuenta.java</file>
             <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/src/java/DAO/ClienteJpaController.java</file>
+            <file>file:/C:/Users/stive/OneDrive/Documentos/NetBeansProjects/Bancoweb-bd/web/JSP/Cliente/registrarcliente.jsp</file>
         </group>
     </open-files>
 </project-private>
