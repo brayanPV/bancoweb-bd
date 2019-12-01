@@ -8,10 +8,15 @@ package NEGOCIO;
 import DAO.ClienteJpaController;
 import DAO.Conexion;
 import DAO.CuentaJpaController;
+import DAO.MovimientoJpaController;
 import DAO.TipoJpaController;
+import DAO.TipoMovimientoJpaController;
+import DAO.exceptions.NonexistentEntityException;
 import DTO.Cliente;
 import DTO.Cuenta;
+import DTO.Movimiento;
 import DTO.Tipo;
+import DTO.TipoMovimiento;
 import com.sun.istack.internal.logging.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +39,10 @@ public class Banco {
     List<Cuenta> cuentas = cuentaDAO.findCuentaEntities();
     TipoJpaController tipoDAO = new TipoJpaController(con.getBd());
     List<Tipo> tipos = tipoDAO.findTipoEntities();
+    TipoMovimientoJpaController tipoMovimientoDAO = new TipoMovimientoJpaController(con.getBd());
+    List<TipoMovimiento> tipoMovimientos = tipoMovimientoDAO.findTipoMovimientoEntities();
+    MovimientoJpaController movimientoDAO = new MovimientoJpaController(con.getBd());
+    List<Movimiento> movimientos = movimientoDAO.findMovimientoEntities();
 
     public Banco() {
     }
@@ -77,21 +86,79 @@ public class Banco {
             cuentaDAO.create(cta);
             return true;
         } catch (Exception e) {
-            System.err.println(e.getMessage());            
+            System.err.println(e.getMessage());
         }
 
         return false;
     }
-    
-    public Date currentDate(){
+
+    public boolean realizarConsignacion(String fecha, int valor, int nroCuenta, int tipoMovimiento) throws ParseException, NonexistentEntityException, Exception {
+        Cuenta cta = new Cuenta();
+        cta.setNroCuenta(nroCuenta);
+        cta = findCuentaByNroCuenta(cta);
+        if (cta == null) {
+            return false;
+        }
+        TipoMovimiento t = new TipoMovimiento();
+        t.setId(tipoMovimiento);
+        t = buscarTipoMovimiento(t);
+        if (t != null && t.getId() == 1) {
+            Movimiento mov = new Movimiento();
+            mov.setFecha(crearFecha(fecha));
+            mov.setValor(valor);
+            mov.setNroCuenta(cta);
+            cta.setSaldo(cta.getSaldo() + valor);
+            cuentaDAO.edit(cta);
+            mov.setIdTipoMovimiento(t);
+            try {
+                movimientoDAO.create(mov);
+                return true;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return false;
+    }
+
+    public boolean realizarRetiro(String fecha, int valor, int nroCuenta, int tipoMovimiento) throws ParseException {
+        Cuenta cta = new Cuenta();
+        cta.setNroCuenta(nroCuenta);
+        cta = findCuentaByNroCuenta(cta);
+        if (cta == null) {
+            return false;
+        }
+        TipoMovimiento t = new TipoMovimiento();
+        t.setId(tipoMovimiento);
+        t = buscarTipoMovimiento(t);
+        if (t != null && t.getId() == 2) {
+            Movimiento mov = new Movimiento();
+            mov.setFecha(crearFecha(fecha));
+            mov.setValor(valor);
+            mov.setNroCuenta(cta);
+            if (cta.getSaldo() >= valor) {
+                cta.setSaldo(cta.getSaldo() - valor);
+                try {
+                    movimientoDAO.create(mov);
+                    return true;
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public Date currentDate() {
         DateTimeFormatter day = DateTimeFormatter.ofPattern("dd");
-        DateTimeFormatter month = DateTimeFormatter.ofPattern("MM");  
+        DateTimeFormatter month = DateTimeFormatter.ofPattern("MM");
         DateTimeFormatter year = DateTimeFormatter.ofPattern("yyyy");
-        LocalDateTime now = LocalDateTime.now();  
-        int dia= Integer.parseInt(day.format(now));
-        int mes= Integer.parseInt(month.format(now));
-        int anio= Integer.parseInt(year.format(now));        
-        return new Date(anio-1900,mes-1,dia);
+        LocalDateTime now = LocalDateTime.now();
+        int dia = Integer.parseInt(day.format(now));
+        int mes = Integer.parseInt(month.format(now));
+        int anio = Integer.parseInt(year.format(now));
+        return new Date(anio - 1900, mes - 1, dia);
     }
 
     private Date crearFecha(String fecha) throws ParseException {
@@ -104,6 +171,24 @@ public class Banco {
         for (Tipo t : this.tipos) {
             if (t.equals(x)) {
                 return t;
+            }
+        }
+        return null;
+    }
+
+    private TipoMovimiento buscarTipoMovimiento(TipoMovimiento x) {
+        for (TipoMovimiento t : tipoMovimientos) {
+            if (t.equals(x)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public Cuenta findCuentaByNroCuenta(Cuenta x) {
+        for (Cuenta c : cuentas) {
+            if (c.equals(x)) {
+                return c;
             }
         }
         return null;
