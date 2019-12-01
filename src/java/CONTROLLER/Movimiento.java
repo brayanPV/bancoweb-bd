@@ -51,8 +51,8 @@ public class Movimiento extends HttpServlet {
                     request.getRequestDispatcher("./JSP/Movimiento/registroexitoso.jsp").forward(request, response);
                 } else {
                     System.err.println("falso");
-                    request.getSession().setAttribute("error", "Dato ya registrado en el sistema");
-                    request.getRequestDispatcher("./JSP/error/errorMovimiento.jsp").forward(request, response);
+                    request.getSession().setAttribute("error", "Aca hay error pai");
+                    request.getRequestDispatcher("./JSP/error/errormovimiento.jsp").forward(request, response);
                 }
             } else if (tipo == 2) {
                 if (banquito.realizarRetiro(fecha, valor, cta, tipo)) {
@@ -60,8 +60,8 @@ public class Movimiento extends HttpServlet {
                     request.getRequestDispatcher("./JSP/Movimiento/registroexitoso.jsp").forward(request, response);
                 } else {
                     System.err.println("falso");
-                    request.getSession().setAttribute("error", "Dato ya registrado en el sistema");
-                    request.getRequestDispatcher("./JSP/error/errorMovimiento.jsp").forward(request, response);
+                    request.getSession().setAttribute("error", "Aca hay error pai");
+                    request.getRequestDispatcher("./JSP/error/errormovimiento.jsp").forward(request, response);
                 }
             }
         } catch (Exception e) {
