@@ -121,7 +121,7 @@ public class Banco {
         return false;
     }
 
-    public boolean realizarRetiro(String fecha, int valor, int nroCuenta, int tipoMovimiento) throws ParseException {
+    public boolean realizarRetiro(String fecha, int valor, int nroCuenta, int tipoMovimiento) throws ParseException, NonexistentEntityException, Exception {
         Cuenta cta = new Cuenta();
         cta.setNroCuenta(nroCuenta);
         cta = findCuentaByNroCuenta(cta);
@@ -138,6 +138,8 @@ public class Banco {
             mov.setNroCuenta(cta);
             if (cta.getSaldo() >= valor) {
                 cta.setSaldo(cta.getSaldo() - valor);
+                cuentaDAO.edit(cta);
+                mov.setIdTipoMovimiento(t);
                 try {
                     movimientoDAO.create(mov);
                     return true;
