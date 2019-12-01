@@ -19,9 +19,9 @@
         <a class="btnStyle" href="./index.html"> HOME </a>
         <form name="registrarCta" action="registrarCuenta.do" class="register">
 
-            <p>Nro. Cuenta (10 dígitos):<input class="register-input" maxlength="10" type="text" name="nrocuenta" value="" /></p>    
+            <p>Nro. Cuenta (10 dígitos):<input class="register-input" maxlength="10" type="text" name="nrocuenta" value="" required /></p>    
             <h3>Tipo de Cuenta</h3>
-            <select name="tipocuenta">
+            <select name="tipocuenta" required>
                 <option> Elegir tipo </option>
                 <option value="1"> Cuenta Ahorros</option>
                 <option value="2"> Cuenta Corriente </option>           

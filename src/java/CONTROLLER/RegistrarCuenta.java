@@ -38,10 +38,15 @@ public class RegistrarCuenta extends HttpServlet {
             int t = Integer.parseInt(request.getParameter("tipocuenta"));            
             Integer cedula = Integer.parseInt(request.getParameter("cedula"));
             
-            Banco banco = (Banco) (request.getSession().getAttribute("banco"));
+            //Banco banco = (Banco) (request.getSession().getAttribute("banco"));
+            Banco banquito = new Banco();
             
-            if (banco.insertarCuenta(nroCuenta, cedula, t)) {
-                request.getSession().setAttribute("banco", banco);
+            if (request.getSession().getAttribute("banquito") != null) {
+                banquito = (Banco) (request.getSession().getAttribute("banquito"));
+            }
+            
+            if (banquito.insertarCuenta(nroCuenta, cedula, t)) {
+                request.getSession().setAttribute("banquito", banquito);
                 request.getRequestDispatcher("./JSP/Cuenta/registroexitoso.jsp").forward(request, response);
             }
             else {
@@ -52,6 +57,7 @@ public class RegistrarCuenta extends HttpServlet {
             
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            System.out.println("el error es: "+e.getMessage());
             request.getSession().setAttribute("error", e.getMessage());
             request.getRequestDispatcher("./JSP/error/errorCta.jsp").forward(request, response);
         }

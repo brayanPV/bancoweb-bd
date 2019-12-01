@@ -15,6 +15,9 @@ import DTO.Tipo;
 import com.sun.istack.internal.logging.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -69,13 +72,26 @@ public class Banco {
         cta.setNroCuenta(nroCuenta);
         cta.setCedula(x);
         cta.setTipo(t);
+        cta.setFechacreacion(currentDate());
         try {
             cuentaDAO.create(cta);
             return true;
         } catch (Exception e) {
+            System.err.println(e.getMessage());            
         }
 
         return false;
+    }
+    
+    public Date currentDate(){
+        DateTimeFormatter day = DateTimeFormatter.ofPattern("dd");
+        DateTimeFormatter month = DateTimeFormatter.ofPattern("MM");  
+        DateTimeFormatter year = DateTimeFormatter.ofPattern("yyyy");
+        LocalDateTime now = LocalDateTime.now();  
+        int dia= Integer.parseInt(day.format(now));
+        int mes= Integer.parseInt(month.format(now));
+        int anio= Integer.parseInt(year.format(now));        
+        return new Date(anio-1900,mes-1,dia);
     }
 
     private Date crearFecha(String fecha) throws ParseException {

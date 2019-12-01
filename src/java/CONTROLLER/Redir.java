@@ -37,21 +37,24 @@ public class Redir extends HttpServlet {
             Banco banco = new Banco();
             
             String url = request.getParameter("url");
+            request.getRequestDispatcher(url).forward(request, response);
             
-            if (request.getSession().getAttribute("banco") != null) {
-                banco = (Banco) (request.getSession().getAttribute("banco"));
-                request.getSession().setAttribute("banco", banco);
-                request.getRequestDispatcher(url).forward(request, response);
-            }
-            else {
-                System.err.println("falso");
-                request.getSession().setAttribute("error", "No existe banco creado");
-                request.getRequestDispatcher("./JSP/error/errorbanco.jsp").forward(request, response);
-            }
+//            if (request.getSession().getAttribute("banco") != null) {
+//                banco = (Banco) (request.getSession().getAttribute("banco"));
+//                request.getSession().setAttribute("banco", banco);
+//                request.getRequestDispatcher(url).forward(request, response);
+//            }
+//            else {
+//                System.err.println("falso");
+//                request.getSession().setAttribute("error", "No existe banco creado");
+//                request.getRequestDispatcher("./JSP/error/errorbanco.jsp").forward(request, response);
+//            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
             request.getSession().setAttribute("error", e.getMessage());
-            request.getRequestDispatcher("./JSP/error/errorbanco.jsp").forward(request, response);
+            request.getRequestDispatcher("./JSP/error/er"
+                    + ""
+                    + "rorbanco.jsp").forward(request, response);
         }
     }
 

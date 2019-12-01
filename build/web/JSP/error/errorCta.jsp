@@ -11,7 +11,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
+    <%
+            String error=(String)(request.getSession().getAttribute("error"));
+        %>
     <body>
-        <h1>La esta cagando pai, pero con las cuentas</h1>
+        <h1>La esta cagando pai, pero con las cuentas <%=error%></h1>
     </body>
 </html>
