@@ -265,5 +265,9 @@ public class Banco {
         }
         return false;
     }
+    
+    public List<Cuenta> getCuentas() {
+        return cuentas;
+    }
 
 }
