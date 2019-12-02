@@ -63,6 +63,22 @@ public class Movimiento extends HttpServlet {
                     request.getSession().setAttribute("error", "Aca hay error pai");
                     request.getRequestDispatcher("./JSP/error/errormovimiento.jsp").forward(request, response);
                 }
+            } else if (tipo == 3) {
+                int retiro = 2;
+                int consignacion = 1;
+                int ctaDestino = Integer.parseInt(request.getParameter("cuentaDestino"));
+                if (banquito.realizarTransferencia(fecha, valor, cta, ctaDestino, retiro, consignacion)) {
+                    request.getSession().setAttribute("banquito", banquito);
+                    request.getRequestDispatcher("./JSP/Movimiento/registroexitoso.jsp").forward(request, response);
+                } else {
+                    System.err.println("falso");
+                    request.getSession().setAttribute("error", "Aca hay error pai");
+                    request.getRequestDispatcher("./JSP/error/errormovimiento.jsp").forward(request, response);
+                }
+            } else {
+                System.err.println("falso");
+                request.getSession().setAttribute("error", "papi no ha seleccionado movimiento");
+                request.getRequestDispatcher("./JSP/error/errormovimiento.jsp").forward(request, response);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());

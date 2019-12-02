@@ -152,6 +152,29 @@ public class Banco {
         return false;
     }
 
+    public boolean realizarTransferencia(String fecha, int valor, int nroCuenta, int nroCuentaDestino, int retiro, int consignacion) throws NonexistentEntityException, Exception {
+        Cuenta cta = new Cuenta();
+        cta.setNroCuenta(nroCuenta);
+        cta = findCuentaByNroCuenta(cta);
+        if (cta == null) {
+            return false;
+        }
+        TipoMovimiento t = new TipoMovimiento();
+        t.setId(retiro);
+        t = buscarTipoMovimiento(t);
+        if (t != null && t.getId() == 2) {
+            realizarRetiro(fecha, valor, nroCuenta, retiro);
+            TipoMovimiento c = new TipoMovimiento();
+            c.setId(consignacion);
+            c = buscarTipoMovimiento(c);
+            if (c != null && c.getId() == 1) {
+                realizarConsignacion(fecha, valor, nroCuentaDestino, consignacion);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Date currentDate() {
         DateTimeFormatter day = DateTimeFormatter.ofPattern("dd");
         DateTimeFormatter month = DateTimeFormatter.ofPattern("MM");
@@ -220,12 +243,12 @@ public class Banco {
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-    
-    public Cliente findCliente(int cedula){
+
+    public Cliente findCliente(int cedula) {
         return clienteDAO.findCliente(cedula);
     }
-    
-    public boolean UpdateCliente(Integer cedula, String nombre, String fechanacimiento, String dircorrespondencia, int telefono, String email) throws ParseException{
+
+    public boolean UpdateCliente(Integer cedula, String nombre, String fechanacimiento, String dircorrespondencia, int telefono, String email) throws ParseException {
         Cliente c = clienteDAO.findCliente(cedula);
         c.setCedula(cedula);
         c.setNombre(nombre);
@@ -233,11 +256,11 @@ public class Banco {
         c.setDircorrespondencia(dircorrespondencia);
         c.setTelefono(telefono);
         c.setEmail(email);
-        
-        try{
+
+        try {
             clienteDAO.edit(c);
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e);
         }
         return false;
