@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -175,6 +176,36 @@ public class Banco {
         return false;
     }
 
+    public String mostrarExtractoBancario(int cedula, String fechaInicio, String fechaFinal) throws ParseException {
+        String msg = "";
+        ArrayList<Cuenta> cta = findCuentaByNroCedula(cedula);
+        if (cta == null) {
+            return msg;
+        }
+        for (int i = 0; i < cta.size(); i++) {
+            ArrayList<Movimiento> mov = buscarMovimientos(cta.get(i).getNroCuenta());
+            for (int j = 0; j < mov.size(); j++) {
+                if (mov.get(j).getFecha().after(crearFecha(fechaInicio)) && mov.get(j).getFecha().before(crearFecha(fechaFinal))) {
+                    msg += "Holis el extracto bancario entre las fechas  " + fechaInicio + " y " + fechaFinal + " " + mov.get(j).toString();
+                }
+            }
+        }
+        return msg;
+    }
+
+    private ArrayList buscarMovimientos(int nroCta) {
+        ArrayList<Movimiento> mov = new ArrayList<Movimiento>();
+        Cuenta c = new Cuenta();
+        c.setNroCuenta(nroCta);
+        c = findCuentaByNroCuenta(c);
+        for (Movimiento m : movimientos) {
+            if (m.getNroCuenta().equals(c)) {
+                mov.add(m);
+            }
+        }
+        return mov;
+    }
+
     public Date currentDate() {
         DateTimeFormatter day = DateTimeFormatter.ofPattern("dd");
         DateTimeFormatter month = DateTimeFormatter.ofPattern("MM");
@@ -217,6 +248,19 @@ public class Banco {
             }
         }
         return null;
+    }
+
+    public ArrayList findCuentaByNroCedula(int nroCedula) {
+        ArrayList<Cuenta> resultado = new ArrayList<Cuenta>();
+        Cliente c = new Cliente();
+        c.setCedula(nroCedula);
+        c = buscarCliente(c);
+        for (Cuenta cta : cuentas) {
+            if (cta.getCedula().equals(c)) {
+                resultado.add(cta);
+            }
+        }
+        return resultado;
     }
 
     private Cliente buscarCliente(Cliente x) {
@@ -265,7 +309,7 @@ public class Banco {
         }
         return false;
     }
-    
+
     public List<Cuenta> getCuentas() {
         return cuentas;
     }
