@@ -220,5 +220,27 @@ public class Banco {
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
+    
+    public Cliente findCliente(int cedula){
+        return clienteDAO.findCliente(cedula);
+    }
+    
+    public boolean UpdateCliente(Integer cedula, String nombre, String fechanacimiento, String dircorrespondencia, int telefono, String email) throws ParseException{
+        Cliente c = clienteDAO.findCliente(cedula);
+        c.setCedula(cedula);
+        c.setNombre(nombre);
+        c.setFechanacimiento(crearFecha(fechanacimiento));
+        c.setDircorrespondencia(dircorrespondencia);
+        c.setTelefono(telefono);
+        c.setEmail(email);
+        
+        try{
+            clienteDAO.edit(c);
+            return true;
+        } catch(Exception e){
+            System.err.println(e);
+        }
+        return false;
+    }
 
 }
