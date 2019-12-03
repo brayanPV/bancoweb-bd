@@ -48,7 +48,7 @@ public class Movimiento extends HttpServlet {
             if (tipo == 1) {
                 if (banquito.realizarConsignacion(fecha, valor, cta, tipo)) {
                     request.getSession().setAttribute("banquito", banquito);
-                    request.getRequestDispatcher("./JSP/Movimiento/registroexitoso.jsp").forward(request, response);
+                    request.getRequestDispatcher("./index.html").forward(request, response);
                 } else {
                     System.err.println("falso");
                     request.getSession().setAttribute("error", "Aca hay error pai");
@@ -57,7 +57,7 @@ public class Movimiento extends HttpServlet {
             } else if (tipo == 2) {
                 if (banquito.realizarRetiro(fecha, valor, cta, tipo)) {
                     request.getSession().setAttribute("banquito", banquito);
-                    request.getRequestDispatcher("./JSP/Movimiento/registroexitoso.jsp").forward(request, response);
+                    request.getRequestDispatcher("./index.html").forward(request, response);
                 } else {
                     System.err.println("falso");
                     request.getSession().setAttribute("error", "Aca hay error pai");
@@ -69,7 +69,7 @@ public class Movimiento extends HttpServlet {
                 int ctaDestino = Integer.parseInt(request.getParameter("cuentaDestino"));
                 if (banquito.realizarTransferencia(fecha, valor, cta, ctaDestino, retiro, consignacion)) {
                     request.getSession().setAttribute("banquito", banquito);
-                    request.getRequestDispatcher("./JSP/Movimiento/registroexitoso.jsp").forward(request, response);
+                    request.getRequestDispatcher("./index.html").forward(request, response);
                 } else {
                     System.err.println("falso");
                     request.getSession().setAttribute("error", "Aca hay error pai");

@@ -9,8 +9,11 @@
 <%@page import="DTO.Cuenta"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="">
+
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 
@@ -31,59 +34,100 @@
 
         <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title></title>
     </head>
+
     <body>
         <% Banco banco = new Banco();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");%>
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");%>
+        <header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <img src="images/logo.png" class="img-fluid" alt="Responsive image" alt="Lorem Ipsum Bank">
+                    </div>
+                    <div class="col-lg-9 align-self-center">
+                        <h1>Lorem Ipsum</h1>
+                        <h1>Bank</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <nav class="navbar sticky-top navbar-light bg-light">
+                <a class="navbar-brand" href="./index.html">Inicio</a>
+            </nav>
+            <hr>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">Ver Cuentas</div>
+                            <table border="1" id="example" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>Numero Cuenta</th>
+                                        <th>Saldo</th>
+                                        <th>Creacion</th>
+                                        <th>Cedula</th>
+                                        <th>Tipo</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Numero Cuenta</th>
+                                        <th>Saldo</th>
+                                        <th>Creacion</th>
+                                        <th>Cedula</th>
+                                        <th>Tipo</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <% for (Cuenta cuentas : banco.getCuentas()) {%>
+                                    <tr>
+                                        <td><%= cuentas.getNroCuenta()%></td>
+                                        <td><%= cuentas.getSaldo()%></td>
+                                        <td><%= format.format(cuentas.getFechacreacion())%></td>
+                                        <td><%= cuentas.getCedula().getCedula()%> </td>
+                                        <td><%= cuentas.getTipo().getNombre()%></td>
+                                    </tr>
+                                    <% }%>
 
 
-        <h1>Hello World!</h1>
-        <a class="btnStyle" href="./index.html"> Volver </a>
-        
-        <table border="1" id="example" class="display">
-            <thead>
-                <tr>
-                    <th>Numero Cuenta</th>
-                    <th>Saldo</th>
-                    <th>Creacion</th>
-                    <th>Cedula</th>
-                    <th>Tipo</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>Numero Cuenta</th>
-                    <th>Saldo</th>
-                    <th>Creacion</th>
-                    <th>Cedula</th>
-                    <th>Tipo</th>
-                </tr>
-            </tfoot>
-            <tbody>
-                <% for (Cuenta cuentas : banco.getCuentas()) {%>
-                <tr>
-                    <td><%= cuentas.getNroCuenta()%></td>
-                    <td><%= cuentas.getSaldo()%></td>
-                    <td><%= format.format(cuentas.getFechacreacion())%></td>
-                    <td><%= cuentas.getCedula().getCedula()%> </td>
-                    <td><%= cuentas.getTipo().getNombre()%></td>
-                </tr>
-                <% }%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-            </tbody>
-        </table>
+            </div>
+            <footer class="text-center">
+                <p>
+                    Copyright © AÑO Autor: | Cod: | Correo:
+                    Desarrollo De Aplicaciones Web - Ing.Sistemas - UFPS
+                </p>
+            </footer>
+        </div>
+
+
+
+
+
         <script>
             $(document).ready(function () {
                 var collapsedGroups = {};
 
                 var table = $('#example').DataTable({
-                    "columnDefs": [
-                        {"visible": false, "targets": [3]}
+                    "columnDefs": [{
+                            "visible": false,
+                            "targets": [3]
+                        }],
+                    order: [
+                        [3, 'asc']
                     ],
-                    order: [[3, 'asc']],
                     rowGroup: {
-// Uses the 'row group' plugin
+                        // Uses the 'row group' plugin
                         dataSrc: 3,
                         startRender: function (rows, group) {
                             var collapsed = !!collapsedGroups[group];
@@ -108,6 +152,8 @@
                 });
 
             });
+
         </script>
     </body>
+
 </html>

@@ -48,7 +48,7 @@ public class RegistrarCliente extends HttpServlet {
             }
             if (banco.insertarCliente(cedula, nombre, fecha, dir, telefono, email)) {
                 request.getSession().setAttribute("banco", banco);
-                request.getRequestDispatcher("./JSP/Cliente/registroexitoso.jsp").forward(request, response);
+                request.getRequestDispatcher("./index.html").forward(request, response);
             } else {
                 System.err.println("falso");
                 request.getSession().setAttribute("error", "Dato ya registrado en el sistema");
