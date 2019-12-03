@@ -177,18 +177,20 @@ public class Banco {
     }
 
     public String mostrarExtractoBancario(int cedula, String fechaInicio, String fechaFinal) throws ParseException {
-        String msg = "";
+        String msg ="";
         ArrayList<Cuenta> cta = findCuentaByNroCedula(cedula);
         if (cta == null) {
-            return msg;
+            return null;
         }
         for (int i = 0; i < cta.size(); i++) {
             ArrayList<Movimiento> mov = buscarMovimientos(cta.get(i).getNroCuenta());
             for (int j = 0; j < mov.size(); j++) {
                 if (mov.get(j).getFecha().after(crearFecha(fechaInicio)) && mov.get(j).getFecha().before(crearFecha(fechaFinal))) {
-                    msg += mov.get(j).toString();
+                    msg+= mov.get(j).toString();
+                    
                 }
             }
+            return msg;
         }
         return msg;
     }
@@ -313,5 +315,11 @@ public class Banco {
     public List<Cuenta> getCuentas() {
         return cuentas;
     }
+
+    public List<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+    
+    
 
 }

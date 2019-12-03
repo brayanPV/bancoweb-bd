@@ -6,7 +6,15 @@
 package CONTROLLER;
 
 import NEGOCIO.Banco;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +40,8 @@ public class Extracto extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/pdf");
+        OutputStream out = response.getOutputStream();
         try {
             Integer cedula = Integer.parseInt(request.getParameter("cedula"));
             String fechaInicio = request.getParameter("fechaInicio");
@@ -43,9 +52,26 @@ public class Extracto extends HttpServlet {
             if (request.getSession().getAttribute("banquito") != null) {
                 banquito = (Banco) (request.getSession().getAttribute("banquito"));
             }
-            if (banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal)!=null) {
-                request.getSession().setAttribute("banquito", banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal));
-                request.getRequestDispatcher("./JSP/Cliente/extractoexitoso.jsp").forward(request, response);
+            if (banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal) != null) {
+
+                Document documento = new Document();
+                PdfWriter.getInstance(documento, out);
+
+                documento.open();
+                Paragraph titulo = new Paragraph();
+                Font fuente = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK);
+                titulo.add(new Phrase("Extracto bancario de " + cedula +" entre las fechas " + fechaInicio +" - " + fechaFinal, fuente));
+                titulo.add(new Phrase(Chunk.NEWLINE));
+                titulo.add(new Phrase(Chunk.NEWLINE));
+                titulo.add(new Phrase(Chunk.NEWLINE));
+                documento.add(titulo);
+                Paragraph par = new Paragraph();
+                par.add(new Phrase(banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal), fuente));
+                documento.add(par);
+                documento.close();
+
+                // request.getSession().setAttribute("banquito", banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal));
+                //request.getRequestDispatcher("./JSP/Cliente/extractoexitoso.jsp").forward(request, response);
             } else {
                 System.err.println("falso");
                 request.getSession().setAttribute("error", "jeje hay error");
