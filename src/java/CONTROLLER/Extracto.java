@@ -44,7 +44,7 @@ public class Extracto extends HttpServlet {
                 banquito = (Banco) (request.getSession().getAttribute("banquito"));
             }
             if (banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal)!=null) {
-                request.getSession().setAttribute("banquito", banquito);
+                request.getSession().setAttribute("banquito", banquito.mostrarExtractoBancario(cedula, fechaInicio, fechaFinal));
                 request.getRequestDispatcher("./JSP/Cliente/extractoexitoso.jsp").forward(request, response);
             } else {
                 System.err.println("falso");

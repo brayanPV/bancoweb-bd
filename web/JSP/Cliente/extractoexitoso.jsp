@@ -15,7 +15,7 @@
        <%
             String banquito=(String)(request.getSession().getAttribute("banquito"));
         %>
-        <h1 class="register-title">Holis: <%=banquito%></h1>
+        <h1 class="register-title"><%=banquito%></h1>
         <p>
             <a href="./index.html">Regresar a Inicio</a>
         </p>

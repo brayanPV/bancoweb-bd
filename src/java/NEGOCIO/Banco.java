@@ -186,7 +186,7 @@ public class Banco {
             ArrayList<Movimiento> mov = buscarMovimientos(cta.get(i).getNroCuenta());
             for (int j = 0; j < mov.size(); j++) {
                 if (mov.get(j).getFecha().after(crearFecha(fechaInicio)) && mov.get(j).getFecha().before(crearFecha(fechaFinal))) {
-                    msg += "Holis el extracto bancario entre las fechas  " + fechaInicio + " y " + fechaFinal + " " + mov.get(j).toString();
+                    msg += mov.get(j).toString();
                 }
             }
         }
